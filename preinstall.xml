@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<installation>
+  <mode>install</mode>
+  <!--
+        <preinstall>
+                        <copy>
+                                <source>/var/www/html/datamodel</source>
+                                <destination>test_copy</destination>
+                        </copy>
+                </copies>
+                <backup>
+                        <configuration_file>../conf/production/config-itop.php</configuration_file>
+                        <destination>../backups/__DB__-%Y-%m-%d.zip</destination>
+                </backup>
+        </preinstall>
+        <source_dir>datamodel</source_dir>
+        <source_env>production</source_env>
+        <target_env>production</target_env>
+        <workspace_dir/>
+        -->
+  <database>
+    <server>$DBHOST</server>
+    <port>$DBORT</port>
+    <name>$DBNAME</name>
+    <user>$DBUSER</user>
+    <pwd>$DBPASSWORD</pwd>
+  </database>
+
+  <admin_account>
+    <user>$ITOPADMIN</user>
+    <password>$ITOPPASSWORD</password>
+  </admin_account>
+  <language>EN US</language>
+
+<selected_modules type="array">
+		<module>itop-structure</module>
+                <module>authent-local</module>
+                <module>itop-attachments</module>
+                <module>itop-welcome-itil</module>
+                <module>itop-profiles-itil</module>
+                <module>itop-config-mgmt</module>
+                <module>itop-service-mgmt</module>
+                <module>itop-tickets</module>
+        </selected_modules>
+         <sample_data>0</sample_data>
+         
+</installation>
