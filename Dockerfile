@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
 # Nastavení dokument rootu
 ENV ITOP_VERSION=3.2.1-1
 ENV ITOP_REVISION=16749
+ENV DBHOST=db
 ENV DBUSER=itop
 ENV DBPASSWORD=itop
 ENV DBNAME=itop
