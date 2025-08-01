@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     mariadb-client \
     gettext-base \
     libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql gd mbstring xml mysqli soap zip
+    && docker-php-ext-install pdo pdo_mysql gd mbstring xml mysqli soap zip ldap
 
 # Nastavení dokument rootu
 ENV ITOP_VERSION=3.2.1-1
@@ -26,9 +26,17 @@ ENV DBNAME=itop
 ENV ITOPADMIN=admin
 ENV ITOPPASSWORD=admin
 ENV ITOPLANG="EN US"
+ENV ITOPURL=http://itop
+
+# Aktivace Apache mod_rewrite
+RUN a2enmod rewrite
+
+# Apache config pro iTop
+COPY apache-itop.conf /etc/apache2/sites-available/000-default.conf
 
 WORKDIR /var/www/html
-
+VOLUME /home/itop
+USER www-data
 
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
@@ -42,22 +50,5 @@ RUN curl -sL https://sourceforge.net/projects/itop/files/itop/${ITOP_VERSION}/iT
     mv web/* . && \
     rm -rf web
 
-# Aktivace Apache mod_rewrite
-RUN a2enmod rewrite
-
-# Apache config pro iTop
-COPY apache-itop.conf /etc/apache2/sites-available/000-default.conf
-
-COPY preinstall.xml /tmp/preinstall-clean.xml
-RUN envsubst </tmp/preinstall-clean.xml >/tmp/preinstall.xml 
-#COPY ./unattended_install.php /var/www/html/toolkit/
-RUN cd datamodels && ln -s 2.x latest
-RUN  bash setup/unattended-install/install-itop.sh /tmp/preinstall.xml
-#cd toolkit && php unattended_install.php --response_file=/tmp/preinstall.xml
-
-# Oprávnění
-RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
-
-VOLUME /var/www/html/data
-VOLUME /var/www/html/conf
-VOLUME /var/www/html/extensions
+COPY preinstall.xml /home/itop/preinstall-clean.xml
+RUN envsubst </home/itop/preinstall-clean.xml >/home/itop/preinstall.xml 
