@@ -18,8 +18,8 @@
 
   <admin_account>
     <user>$ITOPADMIN</user>
-    <password>$ITOPPASSWORD</password>
-     <language>$ITOPLANG</language>
+    <pwd>$ITOPPASSWORD</pwd>
+    <language>$ITOPLANG</language>
   </admin_account>
 
   <selected_modules type="array">

@@ -9,12 +9,17 @@ if [ -l /var/www/html/data ]; then
 else 
   echo "Running setup"
   envsubst </home/itop/preinstall-clean.xml >/home/itop/preinstall.xml
-  for d in extensions conf data env-production; do
-    mv /var/www/html/$d /home/itop/ || mkdir /home/itop/$d
-    ln -sf /home/itop/$d /var/www/html/$d
-  done
+  
   cd /var/www/html/setup/unattended-install
-  bash ./install-itop.sh /home/itop/preinstall.xml
+  if bash ./install-itop.sh /home/itop/preinstall.xml; then
+    for d in extensions conf data env-production; do
+      mv /var/www/html/$d /home/itop/ || mkdir /home/itop/$d
+      ln -sf /home/itop/$d /var/www/html/$d
+    done
+    chown -R www-data /home/itop
+    rm /home/itop/preinstall.xml
+    echo "Setup finished OK!"
+  fi
 fi
 
 echo "Running application"

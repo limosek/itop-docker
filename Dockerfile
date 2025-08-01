@@ -28,7 +28,7 @@ ENV DBNAME=itop
 ENV ITOPADMIN=admin
 ENV ITOPPASSWORD=admin
 ENV ITOPLANG="EN US"
-ENV ITOPURL=http://itop
+ENV ITOPURL=http://itop/
 
 # Aktivace Apache mod_rewrite
 RUN a2enmod rewrite
