@@ -29,15 +29,12 @@ ENV ITOPADMIN=admin
 ENV ITOPPASSWORD=admin
 ENV ITOPLANG="EN US"
 ENV ITOPURL=http://itop/
+ENV DBADMIN=root
+ENV DBADMINPASSWORD=admin
+ENV ITOPMODE=install
 
 # Aktivace Apache mod_rewrite
 RUN a2enmod rewrite
-
-# Apache config pro iTop
-COPY apache-itop.conf /etc/apache2/sites-available/000-default.conf
-
-COPY entrypoint.sh /
-RUN chmod +x /entrypoint.sh
 
 WORKDIR /var/www/html
 VOLUME /home/itop
@@ -54,7 +51,11 @@ RUN curl -sL https://sourceforge.net/projects/itop/files/itop/${ITOP_VERSION}/iT
     rm -rf web
 
 USER root
+# Apache config pro iTop
+COPY apache-itop.conf /etc/apache2/sites-available/000-default.conf
+
+COPY entrypoint.sh /
 
 COPY preinstall.xml /home/itop/preinstall-clean.xml
-RUN envsubst </home/itop/preinstall-clean.xml >/home/itop/preinstall.xml 
+RUN chmod +x /entrypoint.sh
 

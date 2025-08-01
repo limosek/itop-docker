@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <installation>
-  <mode>install</mode>
+  <mode>$ITOPMODE</mode>
   <source_dir>datamodels/2.x/</source_dir>
   <database>
     <server>$DBHOST</server>
