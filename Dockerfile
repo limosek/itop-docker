@@ -29,9 +29,6 @@ ENV ITOPLANG="EN US"
 
 WORKDIR /var/www/html
 
-VOLUME /var/www/html/data
-VOLUME /var/www/html/conf
-VOLUME /var/www/html/extensions/
 
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
@@ -61,3 +58,6 @@ RUN  bash setup/unattended-install/install-itop.sh /tmp/preinstall.xml
 # Oprávnění
 RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 
+VOLUME /var/www/html/data
+VOLUME /var/www/html/conf
+VOLUME /var/www/html/extensions
