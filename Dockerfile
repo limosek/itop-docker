@@ -53,7 +53,8 @@ RUN curl -sL https://sourceforge.net/projects/itop/files/itop/${ITOP_VERSION}/iT
     mv web/* . && \
     rm -rf web
 
+USER root
+
 COPY preinstall.xml /home/itop/preinstall-clean.xml
 RUN envsubst </home/itop/preinstall-clean.xml >/home/itop/preinstall.xml 
 
-USER root

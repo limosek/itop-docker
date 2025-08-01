@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <installation>
   <mode>install</mode>
-  <!--
-        <preinstall>
-                        <copy>
-                                <source>/var/www/html/datamodel</source>
-                                <destination>test_copy</destination>
-                        </copy>
-                </copies>
-                <backup>
-                        <configuration_file>../conf/production/config-itop.php</configuration_file>
-                        <destination>../backups/__DB__-%Y-%m-%d.zip</destination>
-                </backup>
-        </preinstall>
-        <source_dir>datamodel</source_dir>
-        <source_env>production</source_env>
-        <target_env>production</target_env>
-        <workspace_dir/>
-        -->
+  <source_dir>datamodels/2.x/</source_dir>
   <database>
     <server>$DBHOST</server>
     <port>$DBORT</port>
