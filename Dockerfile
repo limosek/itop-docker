@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     mariadb-client \
     gettext-base \
     libzip-dev \
+    libldap-dev \
+    graphviz \
     && docker-php-ext-install pdo pdo_mysql gd mbstring xml mysqli soap zip ldap
 
 # Nastavení dokument rootu
@@ -34,12 +36,13 @@ RUN a2enmod rewrite
 # Apache config pro iTop
 COPY apache-itop.conf /etc/apache2/sites-available/000-default.conf
 
+COPY entrypoint.sh /
+RUN chmod +x /entrypoint.sh
+
 WORKDIR /var/www/html
 VOLUME /home/itop
 USER www-data
 
-COPY entrypoint.sh /
-RUN chmod +x /entrypoint.sh
 ENTRYPOINT /entrypoint.sh
 
 # Stáhneme iTop z GitHubu
@@ -52,3 +55,5 @@ RUN curl -sL https://sourceforge.net/projects/itop/files/itop/${ITOP_VERSION}/iT
 
 COPY preinstall.xml /home/itop/preinstall-clean.xml
 RUN envsubst </home/itop/preinstall-clean.xml >/home/itop/preinstall.xml 
+
+USER root

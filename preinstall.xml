@@ -24,15 +24,21 @@
     <name>$DBNAME</name>
     <user>$DBUSER</user>
     <pwd>$DBPASSWORD</pwd>
+    <db_tls_enabled></db_tls_enabled>
+    <db_tls_ca></db_tls_ca>
+    <prefix></prefix>
   </database>
+  <graphviz_path>/usr/bin/dot</graphviz_path>
+  <language>$ITOPLANG</language>
+  <url>$ITOPURL</url>
 
   <admin_account>
     <user>$ITOPADMIN</user>
     <password>$ITOPPASSWORD</password>
+     <language>$ITOPLANG</language>
   </admin_account>
-  <language>EN US</language>
 
-<selected_modules type="array">
+  <selected_modules type="array">
 		<module>itop-structure</module>
                 <module>authent-local</module>
                 <module>itop-attachments</module>
@@ -41,7 +47,7 @@
                 <module>itop-config-mgmt</module>
                 <module>itop-service-mgmt</module>
                 <module>itop-tickets</module>
-        </selected_modules>
-         <sample_data>0</sample_data>
+  </selected_modules>
+  <sample_data></sample_data>
          
 </installation>
