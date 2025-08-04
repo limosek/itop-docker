@@ -2,6 +2,7 @@
 <installation>
   <mode>$ITOPMODE</mode>
   <source_dir>datamodels/2.x/</source_dir>
+  <datamodel_version>$ITOP_VERSION</datamodel_version>
   <database>
     <server>$DBHOST</server>
     <port>$DBORT</port>
@@ -23,15 +24,19 @@
   </admin_account>
 
   <selected_modules type="array">
-		<module>itop-structure</module>
-                <module>authent-local</module>
-                <module>itop-attachments</module>
-                <module>itop-welcome-itil</module>
-                <module>itop-profiles-itil</module>
-                <module>itop-config-mgmt</module>
-                <module>itop-service-mgmt</module>
-                <module>itop-tickets</module>
+   <item>authent-local</item>
+  <item>itop-config</item>
+  <item>itop-structure</item>
+  <item>itop-attachments</item>
+  <item>itop-core-update</item>
+  <item>itop-portal-base</item>
+  <item>molkobain-handy-framework</item>
+  <item>teemip-framework</item>
+  <item>teemip-ip-mgmt</item>
+  <item>teemip-ipv6-mgmt</item>
+  <item>itop-welcome-itil</item>
   </selected_modules>
+  
   <sample_data></sample_data>
          
 </installation>

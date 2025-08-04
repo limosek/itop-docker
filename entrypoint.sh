@@ -3,8 +3,13 @@
 set -e
 
 echo "Preparing directories..."
-mkdir -p /home/itop/extensions /home/itop/conf /home/itop/data /home/itop/env-production
-chown -R www-data /home/itop
+for d in conf data extensions env-production; do
+  mkdir -p /var/www/html/$d
+  if ! [ -f /var/www/html/$d/.htaccess ]; then
+    cp -R /home/itop/$d/.* /var/www/html/$d/ || true
+    chown -R www-data /var/www/html/$d
+  fi
+done
 
 echo "Waiting for database..."
 until mysqladmin ping -h "$DBHOST" -P "$DBPORT" -u"$DBUSER" -p"$DBPASSWORD" --silent; do
@@ -33,7 +38,7 @@ else
     touch /home/itop/installed.stamp
     echo "Setup finished OK!"
   else
-    ITOPMODE=update
+    ITOPMODE=upgrade
     envsubst </home/itop/preinstall-clean.xml >/home/itop/preinstall.xml
     if bash ./install-itop.sh /home/itop/preinstall.xml; then
       rm /home/itop/preinstall.xml
@@ -44,13 +49,9 @@ else
       exit 1
     fi
   fi
+  echo "Syncing file permissions..."
+  chown -R www-data /var/www/html
 fi
-
-for d in extensions conf data env-production; do
-  mv /var/www/html/$d /home/itop/
-  ln -sf /home/itop/$d /var/www/html/$d
-done
-chown -R www-data /home/itop
 
 echo "Running application"
 apache2-foreground
