@@ -27,7 +27,7 @@ FLUSH PRIVILEGES;
 EOF
 echo "✅ Database '$DBNAME' and user '$DBUSER' are ready."
 
-if [ -f /home/itop/installed.stamp ]; then
+if [ -f /var/www/html/conf/installed.stamp ]; then
   echo "Skipping setup - already set"
 else 
   echo "Running setup"
@@ -35,14 +35,14 @@ else
   cd /var/www/html/setup/unattended-install
   if bash ./install-itop.sh /home/itop/preinstall.xml; then
     rm /home/itop/preinstall.xml
-    touch /home/itop/installed.stamp
+    touch /var/www/html/conf/installed.stamp
     echo "Setup finished OK!"
   else
     ITOPMODE=upgrade
     envsubst </home/itop/preinstall-clean.xml >/home/itop/preinstall.xml
     if bash ./install-itop.sh /home/itop/preinstall.xml; then
       rm /home/itop/preinstall.xml
-      touch /home/itop/installed.stamp
+      touch /var/www/html/conf/installed.stamp
       echo "Update finished OK!"
     else
       echo "Setup or update failed. Exiting"
