@@ -2,12 +2,16 @@
 
 set -e
 
+set_perms() {
+  chown www-data:www-data "$1"
+}
+
 echo "Preparing directories..."
 for d in conf data extensions env-production; do
   mkdir -p /var/www/html/$d
   if ! [ -f /var/www/html/$d/.htaccess ]; then
     cp -R /home/itop/$d/.* /var/www/html/$d/ || true
-    chown -R www-data /var/www/html/$d
+    set_perms /var/www/html/$d
   fi
 done
 
@@ -18,14 +22,18 @@ until mysqladmin ping -h "$DBHOST" -P "$DBPORT" -u"$DBUSER" -p"$DBPASSWORD" --si
 done
 echo "Database ready" 
 
-mysql -h "$DBHOST" -P "$DBPORT" -u"$DBADMINUSER" -p"$DBADMINPASSWORD" <<EOF
-CREATE DATABASE IF NOT EXISTS \`$DBNAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+if [ -n "$DBADMINPASSWORD" ]; then
+  mysql -h "$DBHOST" -P "$DBPORT" -u"$DBADMINUSER" -p"$DBADMINPASSWORD" <<EOF
+  CREATE DATABASE IF NOT EXISTS \`$DBNAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-CREATE USER IF NOT EXISTS '$DBUSER'@'%' IDENTIFIED BY '$DBPASSWORD';
-GRANT ALL PRIVILEGES ON \`$DBNAME\`.* TO '$DBUSER'@'%';
-FLUSH PRIVILEGES;
+  CREATE USER IF NOT EXISTS '$DBUSER'@'%' IDENTIFIED BY '$DBPASSWORD';
+  GRANT ALL PRIVILEGES ON \`$DBNAME\`.* TO '$DBUSER'@'%';
+  FLUSH PRIVILEGES;
 EOF
-echo "✅ Database '$DBNAME' and user '$DBUSER' are ready."
+  echo "✅ Database '$DBNAME' and user '$DBUSER' are ready."
+else
+  echo "No DB admin permissions - assuming that USER and DB already exists."
+fi
 
 if [ -f /var/www/html/conf/installed.stamp ]; then
   echo "Skipping setup - already set"
@@ -50,7 +58,7 @@ else
     fi
   fi
   echo "Syncing file permissions..."
-  chown -R www-data /var/www/html
+  set_perms /var/www/html
 fi
 
 echo "Running application"

@@ -30,10 +30,9 @@ ENV ITOPADMIN=admin
 ENV ITOPPASSWORD=admin
 ENV ITOPLANG="EN US"
 ENV ITOPURL=http://itop/
-ENV DBADMIN=root
-ENV DBADMINPASSWORD=admin
+ENV DBADMINUSER=root
+ENV DBADMINPASSWORD=""
 ENV ITOPMODE=install
-ENV TEEMIP_URL="https://sourceforge.net/projects/teemip/files/teemip%20-%20an%20iTop%20module/3.2.1/teemip-core-ip-mgmt-3.2.1-813.zip/download"
 
 # Aktivace Apache mod_rewrite
 RUN a2enmod rewrite
@@ -51,11 +50,13 @@ RUN curl -sL https://sourceforge.net/projects/itop/files/itop/${ITOP_VERSION}-${
     rm itop.zip && \
     mv web/* . && \
     rm -rf web
-    
-RUN curl -sL $TEEMIP_URL -o teemip.zip && \
-    cd extensions && \
-    unzip ../teemip.zip && \
-    rm ../teemip.zip
+
+COPY extensions/ /var/www/html/extensions
+RUN if ls extensions/*zip; then \
+      for i in extensions/*zip; do \
+        (cd extensions && unzip $(basename $i) && rm $(basename $i)); \
+      done; \
+    fi
 
 USER root
 
