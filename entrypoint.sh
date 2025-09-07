@@ -16,14 +16,14 @@ for d in conf data extensions env-production; do
 done
 
 echo "Waiting for database..."
-until mysqladmin ping -h "$DBHOST" -P "$DBPORT" -u"$DBUSER" -p"$DBPASSWORD" --silent; do
+until mariadb-admin ping --ssl=$DBTLS -h "$DBHOST" -P "$DBPORT" -u"$DBUSER" -p"$DBPASSWORD" --silent; do
     echo -n "."
     sleep 5
 done
 echo "Database ready" 
 
 if [ -n "$DBADMINPASSWORD" ]; then
-  mysql -h "$DBHOST" -P "$DBPORT" -u"$DBADMINUSER" -p"$DBADMINPASSWORD" <<EOF
+  mariadb --ssl=$DBTLS -h "$DBHOST" -P "$DBPORT" -u"$DBADMINUSER" -p"$DBADMINPASSWORD" <<EOF
   CREATE DATABASE IF NOT EXISTS \`$DBNAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
   CREATE USER IF NOT EXISTS '$DBUSER'@'%' IDENTIFIED BY '$DBPASSWORD';
