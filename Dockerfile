@@ -18,13 +18,18 @@ RUN apt-get update && apt-get install -y \
     graphviz \
     && docker-php-ext-install pdo pdo_mysql gd mbstring xml mysqli soap zip ldap
 
+ARG ITOP_VERSION=3.2.2
+ARG ITOP_SUBVERSION=1
+ARG ITOP_REVISION=17851
+
 # Nastavení dokument rootu
-ENV ITOP_VERSION=3.2.1
-ENV ITOP_SUBVERSION=1
-ENV ITOP_REVISION=16749
+ENV ITOP_VERSION=${ITOP_VERSION}
+ENV ITOP_SUBVERSION=${ITOP_SUBVERSION}
+ENV ITOP_REVISION=${ITOP_REVISION}
 ENV DBHOST=db
 ENV DBUSER=itop
 ENV DBPASSWORD=itop
+ENV DBPORT=3306
 ENV DBNAME=itop
 ENV DBTLS=off
 ENV ITOPADMIN=admin
@@ -34,6 +39,7 @@ ENV ITOPURL=http://itop/
 ENV DBADMINUSER=root
 ENV DBADMINPASSWORD=""
 ENV ITOPMODE=install
+ENV TESTONLY=""
 
 # Aktivace Apache mod_rewrite
 RUN a2enmod rewrite
