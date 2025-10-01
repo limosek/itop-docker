@@ -1,0 +1,11 @@
+--- setup/applicationinstaller.class.inc.php.orig	2025-10-01 10:22:54.502087160 +0000
++++ setup/applicationinstaller.class.inc.php	2025-10-01 10:26:03.206298833 +0000
+@@ -744,7 +744,7 @@
+ 
+ 				$sOrphanCount = "SELECT COUNT(c.id) FROM `{$sDBPrefix}priv_change` AS c left join `{$sDBPrefix}priv_changeop` AS o ON c.id = o.changeid WHERE o.id IS NULL";
+ 				$iOrphanCount = (int)CMDBSource::QueryToScalar($sOrphanCount);
+-				SetupLog::Info("There are $iOrphanCount useless records in {$sDBPrefix}priv_change (".sprintf('%.2f', ((100.0*$iOrphanCount)/$iTotalCount))."%)");
++				#SetupLog::Info("There are $iOrphanCount useless records in {$sDBPrefix}priv_change (".sprintf('%.2f', ((100.0*$iOrphanCount)/$iTotalCount))."%)");
+ 				if ($iOrphanCount > 0)
+ 				{
+ 					//N°3793

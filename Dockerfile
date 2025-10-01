@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM debian:trixie
 
 # Instalace závislostí
 RUN apt-get update && apt-get install -y \
@@ -16,7 +16,14 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libldap-dev \
     graphviz \
-    && docker-php-ext-install pdo pdo_mysql gd mbstring xml mysqli soap zip ldap
+    patch
+ 
+RUN apt-get install -y \
+    php-pdo php-mysql php-gd php-mbstring php-xml php-mysqli php-soap php-zip php-ldap php-cli apache2 libapache2-mod-php
+
+RUN apt-get install -y curl unzip
+
+RUN a2enmod php8.4
 
 ARG ITOP_VERSION=3.2.2
 ARG ITOP_SUBVERSION=1
@@ -44,6 +51,8 @@ ENV TESTONLY=""
 # Aktivace Apache mod_rewrite
 RUN a2enmod rewrite
 
+RUN chown -R www-data:www-data /var/www/html
+
 WORKDIR /var/www/html
 VOLUME /home/itop
 USER www-data
@@ -51,12 +60,12 @@ USER www-data
 ENTRYPOINT /entrypoint.sh
 
 # Stáhneme iTop z GitHubu
-RUN curl -sL https://sourceforge.net/projects/itop/files/itop/${ITOP_VERSION}-${ITOP_SUBVERSION}/iTop-${ITOP_VERSION}-${ITOP_SUBVERSION}-${ITOP_REVISION}.zip/download \
-    -o itop.zip && \
-    unzip itop.zip && \
-    rm itop.zip && \
-    mv web/* . && \
-    rm -rf web
+RUN pwd; ls -la
+RUN curl -vL https://sourceforge.net/projects/itop/files/itop/${ITOP_VERSION}-${ITOP_SUBVERSION}/iTop-${ITOP_VERSION}-${ITOP_SUBVERSION}-${ITOP_REVISION}.zip/download -o itop.zip
+RUN unzip itop.zip
+RUN rm itop.zip
+RUN mv web/* .
+RUN rm -rf web
 
 COPY extensions/ /var/www/html/extensions
 RUN if ls extensions/*zip; then \
@@ -69,6 +78,10 @@ USER root
 
 # Copy files out of HTML tree for backup
 RUN cp -R /var/www/html /home/itop/
+
+# Apply patches
+COPY patches/*patch /tmp
+RUN cd /var/www/html; for p in /tmp/*.patch; do patch -p0 <$p; done
 
 # Apache config pro iTop
 COPY apache-itop.conf /etc/apache2/sites-available/000-default.conf
