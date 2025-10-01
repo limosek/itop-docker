@@ -44,7 +44,7 @@ docker run --rm \
   -v ./data:/home/itop/data \
   -v ./conf:/home/itop/conf \
   -v ./prod:/home/itop/env-production \
-  limosek/itop:321 2>&1 | tee instal.log | grep =====TEST_OK || errexit "Error" 1
+  limosek/itop:321 2>&1 | tee install.log | grep =====TEST_OK || errexit "Error" 1
 
 echo "Testing upgrade to 3.2.2"
 docker run --rm \

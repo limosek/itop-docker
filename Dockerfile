@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y \
 RUN apt-get install -y \
     php-pdo php-mysql php-gd php-mbstring php-xml php-mysqli php-soap php-zip php-ldap php-cli apache2 libapache2-mod-php
 
-RUN apt-get install -y curl unzip
+RUN apt-get install -y curl unzip php-curl
 
 RUN a2enmod php8.4
 
