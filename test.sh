@@ -88,3 +88,5 @@ docker run --rm \
   limosek/itop:322 2>&1 | tee install3.log | grep =====TEST_OK || errexit "Error" 1
 
 cleanup
+
+echo "All tests passed!"

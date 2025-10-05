@@ -88,4 +88,6 @@ elif [ "$TESTONLY" = "sh" ]; then
 fi
 
 echo "Running application"
-apache2-foreground
+#apache2-foreground
+apache2ctl -X
+

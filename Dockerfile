@@ -52,6 +52,7 @@ ENV TESTONLY=""
 RUN a2enmod rewrite
 
 RUN chown -R www-data:www-data /var/www/html
+RUN rm /var/www/html/index.html
 
 WORKDIR /var/www/html
 VOLUME /home/itop
@@ -60,7 +61,6 @@ USER www-data
 ENTRYPOINT /entrypoint.sh
 
 # Stáhneme iTop z GitHubu
-RUN pwd; ls -la
 RUN curl -vL https://sourceforge.net/projects/itop/files/itop/${ITOP_VERSION}-${ITOP_SUBVERSION}/iTop-${ITOP_VERSION}-${ITOP_SUBVERSION}-${ITOP_REVISION}.zip/download -o itop.zip
 RUN unzip itop.zip
 RUN rm itop.zip
